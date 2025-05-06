@@ -1,11 +1,42 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
+import { checkValidData } from "../utils/validate";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
 
+  const [errorMessage, seterrorMessage] = useState(null); // To store the error message
+
+  const email = useRef(null);
+
+  const password = useRef(null);
+
+  const name = useRef(null);
+
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
+  };
+
+  const handleButtonClick = () => {
+    // validation of form data
+
+    // console.log(email.current.value);
+    // console.log(password.current.value);  Once try this to run this and check console
+
+    const message = checkValidData(
+      email.current.value,
+      password.current.value,
+      name.current.value
+    );
+    // console.log(message);
+
+    seterrorMessage(message);
+
+    // After the form Validation now i can do sign In ans Sign Up
+    // now create a new project in firebase (create a firebase file in utils)
+    // after creating the file and copy paste do authentiation in the firebase
+
+    
   };
 
   return (
@@ -25,7 +56,10 @@ const Login = () => {
 
       {/* Login form container */}
       <div className="relative z-10 flex items-center justify-center h-full">
-        <form className="bg-black opacity-90 p-12 rounded-md w-full max-w-md">
+        <form
+          className="bg-black opacity-90 p-12 rounded-md w-full max-w-md"
+          onSubmit={(e) => e.preventDefault}
+        >
           <h1 className="text-3xl font-bold mb-6">
             {isSignInForm ? "Sign In" : "Sign Up"}
           </h1>
@@ -33,6 +67,7 @@ const Login = () => {
           <div className="flex flex-col space-y-4">
             {!isSignInForm && (
               <input
+                ref={name}
                 type="text"
                 placeholder="Enter your name"
                 className="p-3 rounded bg-gray-700"
@@ -41,20 +76,24 @@ const Login = () => {
             )}
 
             <input
+              ref={email}
               type="email"
               placeholder="Email address"
               className="p-3 rounded bg-gray-700"
               required
             />
             <input
+              ref={password}
               type="password"
               placeholder="Password"
               className="p-3 rounded bg-gray-700"
               required
             />
+            <p className="text-red-500 p-2">{errorMessage}</p>
             <button
               type="submit"
               className="bg-red-600 py-3 rounded font-semibold hover:bg-red-700 transition"
+              onClick={handleButtonClick}
             >
               {isSignInForm ? "Sign In" : "Sign Up"}
             </button>
@@ -101,6 +140,8 @@ export default Login;
 // Convert signIn form to Signup form by toggleSigninForm
 //  {isSignInForm ? "Sign In" : "Sign Up"} keep in mind
 
-
-
-// Step 3 : How to handle Form Validation
+// Step 3 : How to handle Form Validation (Regex for form validation)
+// checkValidData funtion is used to check the data
+// we need email and password to pass down to function right there is where useRef comes Into picture
+// useRef points to the reference of the box (Do research on this state variable)
+// if you have button inside the form and if you click on it will try to submit the form so use e.preventDefault
