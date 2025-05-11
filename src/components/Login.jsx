@@ -1,6 +1,14 @@
 import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidData } from "../utils/validate";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -13,30 +21,74 @@ const Login = () => {
 
   const name = useRef(null);
 
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
   };
 
   const handleButtonClick = () => {
     // validation of form data
-
-    // console.log(email.current.value);
-    // console.log(password.current.value);  Once try this to run this and check console
-
     const message = checkValidData(
       email.current.value,
       password.current.value,
-      name.current.value
+      !isSignInForm ? name.current?.value : "" // Only pass name if it's sign up
     );
-    // console.log(message);
 
     seterrorMessage(message);
 
-    // After the form Validation now i can do sign In ans Sign Up
-    // now create a new project in firebase (create a firebase file in utils)
-    // after creating the file and copy paste do authentiation in the firebase
+    if (message) return; // Means the message has error
 
-    
+    // SignIn/SignUp Logic
+    if (!isSignInForm) {
+      // Sign Up Logic
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          dispatch(
+            addUser({
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+            })
+          );
+          navigate("/body");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          seterrorMessage(errorCode + "-" + errorMessage);
+        });
+    } else {
+      // SignIn Logic
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          dispatch(
+            addUser({
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+            })
+          );
+          navigate("/body");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          seterrorMessage(errorCode + "-" + errorMessage);
+        });
+    }
   };
 
   return (
@@ -58,7 +110,10 @@ const Login = () => {
       <div className="relative z-10 flex items-center justify-center h-full">
         <form
           className="bg-black opacity-90 p-12 rounded-md w-full max-w-md"
-          onSubmit={(e) => e.preventDefault}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleButtonClick();
+          }}
         >
           <h1 className="text-3xl font-bold mb-6">
             {isSignInForm ? "Sign In" : "Sign Up"}
