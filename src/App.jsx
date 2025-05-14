@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   RouterProvider,
   createBrowserRouter,
@@ -14,6 +14,7 @@ import { addUser, removeUser } from "./utils/userSlice";
 const AppLayout = () => {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -23,13 +24,20 @@ const AppLayout = () => {
       } else {
         dispatch(removeUser());
       }
+      setIsInitialized(true);
     });
 
-    // Cleanup subscription
     return () => unsubscribe();
   }, [dispatch]);
 
-  return user ? <Body /> : <Navigate to="/" />;
+  if (!isInitialized) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+  return <Body />;
 };
 
 const appRouter = createBrowserRouter([
@@ -40,6 +48,11 @@ const appRouter = createBrowserRouter([
   {
     path: "/body",
     element: <AppLayout />,
+  },
+  // Catch all other routes and redirect to login
+  {
+    path: "*",
+    element: <Navigate to="/" replace />,
   },
 ]);
 

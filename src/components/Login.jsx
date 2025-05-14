@@ -9,85 +9,84 @@ import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { LOGO } from "../utils/constants";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
-
-  const [errorMessage, seterrorMessage] = useState(null); // To store the error message
+  const [errorMessage, seterrorMessage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const email = useRef(null);
-
   const password = useRef(null);
-
   const name = useRef(null);
-
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
+    seterrorMessage(null);
   };
 
-  const handleButtonClick = () => {
-    // validation of form data
-    const message = checkValidData(
-      email.current.value,
-      password.current.value,
-      !isSignInForm ? name.current?.value : "" // Only pass name if it's sign up
-    );
+  const handleButtonClick = async () => {
+    try {
+      setIsLoading(true);
+      seterrorMessage(null);
 
-    seterrorMessage(message);
-
-    if (message) return; // Means the message has error
-
-    // SignIn/SignUp Logic
-    if (!isSignInForm) {
-      // Sign Up Logic
-      createUserWithEmailAndPassword(
-        auth,
+      // validation of form data
+      const message = checkValidData(
         email.current.value,
-        password.current.value
-      )
-        .then((userCredential) => {
-          const user = userCredential.user;
-          dispatch(
-            addUser({
-              uid: user.uid,
-              email: user.email,
-              displayName: user.displayName,
-            })
-          );
-          navigate("/body");
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          seterrorMessage(errorCode + "-" + errorMessage);
+        password.current.value,
+        !isSignInForm ? name.current?.value : ""
+      );
+
+      if (message) {
+        seterrorMessage(message);
+        return;
+      }
+
+      if (!isSignInForm) {
+        // Sign Up Logic
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email.current.value,
+          password.current.value
+        );
+        const user = userCredential.user;
+
+        await user.updateProfile({
+          displayName: name.current.value,
         });
-    } else {
-      // SignIn Logic
-      signInWithEmailAndPassword(
-        auth,
-        email.current.value,
-        password.current.value
-      )
-        .then((userCredential) => {
-          const user = userCredential.user;
-          dispatch(
-            addUser({
-              uid: user.uid,
-              email: user.email,
-              displayName: user.displayName,
-            })
-          );
-          navigate("/body");
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          seterrorMessage(errorCode + "-" + errorMessage);
-        });
+
+        dispatch(
+          addUser({
+            uid: user.uid,
+            email: user.email,
+            displayName: name.current.value,
+          })
+        );
+        navigate("/body");
+      } else {
+        // SignIn Logic
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email.current.value,
+          password.current.value
+        );
+        const user = userCredential.user;
+
+        dispatch(
+          addUser({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+          })
+        );
+        navigate("/body");
+      }
+    } catch (error) {
+      seterrorMessage(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,7 +95,7 @@ const Login = () => {
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/fa7be975-efc3-48c6-8188-f07fdd1aa476/web/IN-en-20250428-TRIFECTA-perspective_e045264e-b4d4-4a6f-b2cc-f95e3344a332_large.jpg"
+          src={LOGO}
           alt="Netflix background"
           className="w-full h-full object-cover"
         />
@@ -147,10 +146,10 @@ const Login = () => {
             <p className="text-red-500 p-2">{errorMessage}</p>
             <button
               type="submit"
-              className="bg-red-600 py-3 rounded font-semibold hover:bg-red-700 transition"
-              onClick={handleButtonClick}
+              className="bg-red-600 py-3 rounded font-semibold hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isLoading}
             >
-              {isSignInForm ? "Sign In" : "Sign Up"}
+              {isLoading ? "Loading..." : isSignInForm ? "Sign In" : "Sign Up"}
             </button>
           </div>
 

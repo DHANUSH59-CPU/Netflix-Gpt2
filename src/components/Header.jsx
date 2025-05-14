@@ -19,7 +19,7 @@ const Header = () => {
       setError(null);
       await signOut(auth);
       dispatch(removeUser());
-      navigate("/");
+      // navigate("/");
     } catch (error) {
       console.error("Error signing out:", error);
       setError("Failed to sign out. Please try again.");

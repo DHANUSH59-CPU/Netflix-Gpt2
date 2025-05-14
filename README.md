@@ -11,6 +11,9 @@
 - SignUp and SignIn Logic from firebase (API)
 - use redux to store user data (npm i -D @reduxjs/toolkit) && (npm i react-redux)
 - whenever there is state change use authChange API
+- BugFix : if the user is not logged in Redirect / browse to Login Page and vice-versa
+- Unsubcribed to the onAUthStateChanged callback
+- Add hardcoded value to constants file
 
 # Features
 
