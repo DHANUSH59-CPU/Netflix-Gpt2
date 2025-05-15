@@ -31,12 +31,17 @@ const AppLayout = () => {
   }, [dispatch]);
 
   if (!isInitialized) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen w-screen bg-black flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-opacity-30 border-t-red-600 border-white rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   if (!user) {
     return <Navigate to="/" replace />;
   }
+
   return <Body />;
 };
 
@@ -49,7 +54,6 @@ const appRouter = createBrowserRouter([
     path: "/body",
     element: <AppLayout />,
   },
-  // Catch all other routes and redirect to login
   {
     path: "*",
     element: <Navigate to="/" replace />,

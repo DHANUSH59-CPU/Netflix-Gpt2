@@ -64,7 +64,6 @@ const Login = () => {
             displayName: name.current.value,
           })
         );
-        navigate("/body");
       } else {
         // SignIn Logic
         const userCredential = await signInWithEmailAndPassword(
@@ -81,8 +80,10 @@ const Login = () => {
             displayName: user.displayName,
           })
         );
-        navigate("/body");
       }
+
+      // Navigate after successful sign in or sign up
+      navigate("/body");
     } catch (error) {
       seterrorMessage(error.message);
     } finally {

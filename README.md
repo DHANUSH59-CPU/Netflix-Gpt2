@@ -14,6 +14,8 @@
 - BugFix : if the user is not logged in Redirect / browse to Login Page and vice-versa
 - Unsubcribed to the onAUthStateChanged callback
 - Add hardcoded value to constants file
+- Resgiter TMDB API && Create an app & get access token
+- GET data from TMBD now playing movies list API
 
 # Features
 

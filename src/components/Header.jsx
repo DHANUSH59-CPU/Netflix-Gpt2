@@ -13,6 +13,8 @@ const Header = () => {
   const [isSigningOut, setIsSigningOut] = useState(false);
   const [error, setError] = useState(null);
 
+  // you can add authStateChange here also because header component is going to be in my entire app
+
   const handleSignOut = async () => {
     try {
       setIsSigningOut(true);

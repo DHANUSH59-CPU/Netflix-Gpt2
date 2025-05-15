@@ -1,37 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import Header from "./Header";
-import { API_OPTIONS } from "../utils/constants";
+import useNowPlayingMovies from "../hooks/useNowPlayingMovies";
+import MainContainer from "./MainContainer";
+import SecondaryContainer from "./SecondaryContainer";
 
 const Body = () => {
   const user = useSelector((store) => store.user);
-  const [isLoading, setIsLoading] = useState(true);
+  const { isLoading, error } = useNowPlayingMovies();
 
   if (!user) {
     return null;
   }
 
-  useEffect(() => {
-    const getNowPlayingMovies = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetch(
-          "https://api.themoviedb.org/3/movie/now_playing",
-          API_OPTIONS
-        );
-        const json = await data.json();
-        console.log(json);
-      } catch (error) {
-        console.error("Error fetching now playing movies:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getNowPlayingMovies();
-  }, []);
-
   return (
-    <div className="bg-gray-900 min-h-screen">
+    <div className="bg-black min-h-screen">
       <Header />
 
       {/* Loading Animation */}
@@ -54,10 +37,17 @@ const Body = () => {
         </div>
       )}
 
-      {/* Your existing content can go here */}
-      <div className="container mx-auto px-4 py-8 text-white">
-        {/* Your other components/content will appear here after loading */}
-      </div>
+      {/* Error Message */}
+      {error && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+          <div className="text-white text-xl bg-red-600 p-4 rounded">
+            Error: {error}
+          </div>
+        </div>
+      )}
+
+      <MainContainer />
+      <SecondaryContainer />
     </div>
   );
 };

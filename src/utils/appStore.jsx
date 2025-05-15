@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
+import moviesRecuder from "./moviesSlice";
 
 const appStore = configureStore({
   reducer: {
     user: userReducer,
+    movies: moviesRecuder,
   },
   devTools: process.env.NODE_ENV !== "production",
 });
