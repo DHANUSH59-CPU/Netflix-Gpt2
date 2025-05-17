@@ -30,6 +30,8 @@ const useNowPlayingMovies = () => {
           throw new Error("No movies found");
         }
 
+        // console.log(json);
+
         dispatch(addNowPlayingMovies(json));
       } catch (error) {
         console.error("Error fetching now playing movies:", error);

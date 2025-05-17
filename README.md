@@ -16,6 +16,19 @@
 - Add hardcoded value to constants file
 - Resgiter TMDB API && Create an app & get access token
 - GET data from TMBD now playing movies list API
+- custom hook for Now Playing Movies
+- Update store with movies data
+- Planning for Main container && Secondary Container
+- Fetch Data for Trailer Video
+- custor hook for Trailer Video
+- Update store with Trailer Video
+- Embedded the Youtube video and make it autoplay and mute
+- Tailwind css for videobackground
+- Seconadry container
+- - MovieList and MovieCard
+- For MovieList get title and movies as props from secondary container
+- For MovieCard Get poster_path as prop 
+- In MovieList use Movie list to iterate all over the movies obejct 
 
 # Features
 

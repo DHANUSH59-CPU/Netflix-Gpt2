@@ -14,7 +14,7 @@ const Body = () => {
   }
 
   return (
-    <div className="bg-black min-h-screen">
+    <div className="bg-black min-h-screen overflow-x-hidden">
       <Header />
 
       {/* Loading Animation */}

@@ -1,67 +1,40 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { API_OPTIONS } from "../utils/constants";
-import { addTrailerVideo } from "../utils/moviesSlice";
+import React from "react";
+import { useSelector } from "react-redux";
+import useGetMovieVideos from "../hooks/useGetMovieVideos";
 
 const VideoBackground = ({ movieId }) => {
-  const dispatch = useDispatch();
+  useGetMovieVideos({ movieId });
   const trailerVideo = useSelector((store) => store.movies?.trailerVideo);
 
-  useEffect(() => {
-    const getMovieVideos = async () => {
-      try {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${movieId}/videos`,
-          API_OPTIONS
-        );
-        const data = await response.json();
-
-        const trailer =
-          data.results.find(
-            (video) =>
-              video.official &&
-              video.type === "Trailer" &&
-              video.site === "YouTube"
-          ) || data.results.find((video) => video.type === "Trailer");
-
-        if (trailer) dispatch(addTrailerVideo(trailer));
-      } catch (error) {
-        console.error("Error fetching trailer:", error);
-      }
-    };
-
-    if (movieId) getMovieVideos();
-  }, [movieId, dispatch]);
-
   return (
-    <div className="fixed top-0 left-0 w-full h-full overflow-hidden">
-      {/* Video Container */}
-      <div className="absolute inset-0 flex items-center justify-center min-w-full min-h-full">
-        {trailerVideo?.key ? (
+    <div className="absolute inset-0 w-full h-full">
+      {trailerVideo?.key ? (
+        <div className="absolute inset-0">
           <iframe
-            className="absolute min-w-full min-h-full w-auto h-auto object-cover"
+            className="absolute top-1/2 left-1/2 w-[100vw] h-[100vh] -translate-x-1/2 -translate-y-1/2 scale-[2] sm:scale-[1.6] md:scale-[1.4] lg:scale-[1.2]"
             style={{
-              width: "100vw",
-              height: "56.25vw" /* 16:9 aspect ratio */,
+              aspectRatio: "16/9",
+              minWidth: "100vw",
               minHeight: "100vh",
-              minWidth: "177.77vh" /* 16:9 aspect ratio */,
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
+              objectFit: "cover",
+              width: "100%",
+              height: "100%",
             }}
-            src={`https://www.youtube.com/embed/${trailerVideo.key}?autoplay=1&mute=1&controls=0&loop=1&playlist=${trailerVideo.key}&modestbranding=1&rel=0`}
+            src={`https://www.youtube.com/embed/${trailerVideo.key}?autoplay=1&mute=1&controls=0&loop=1&playlist=${trailerVideo.key}&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&disablekb=1&fs=0`}
             title="Movie Trailer"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
-        ) : (
-          <div className="absolute inset-0 bg-black"></div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="absolute inset-0 bg-black"></div>
+      )}
 
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-      <div className="absolute bottom-0 left-0 w-full h-[14.7vw] bg-gradient-to-t from-black via-black/80 to-transparent z-[5]"></div>
+      {/* Enhanced gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-[1]"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 sm:from-black/40 md:from-black/50 via-transparent to-black/30 sm:to-black/40 md:to-black/50 z-[1]"></div>
+      <div className="absolute top-0 left-0 right-0 h-[10vw] sm:h-[12vw] md:h-[15vw] bg-gradient-to-b from-black to-transparent z-[1]"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-[20vw] sm:h-[22vw] md:h-[25vw] bg-gradient-to-t from-black via-black/90 to-transparent z-[1]"></div>
     </div>
   );
 };
