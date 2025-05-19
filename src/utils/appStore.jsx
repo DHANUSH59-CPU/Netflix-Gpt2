@@ -3,6 +3,7 @@ import userReducer from "./userSlice";
 import moviesRecuder from "./moviesSlice";
 import gptReducer from "./gptSlice";
 import languageReducer from "./languageSlice";
+import gptMovieReducer from "./gptMovieSlice";
 
 const appStore = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const appStore = configureStore({
     movies: moviesRecuder,
     gpt: gptReducer,
     language: languageReducer,
+    gptMovies: gptMovieReducer,
   },
   devTools: process.env.NODE_ENV !== "production",
 });

@@ -18,3 +18,5 @@ export const SUPPORTED_LANGUAGES = [
   { identifier: "spanish", name: "Spanish" },
   { identifier: "kannada", name: "Kannada" },
 ];
+
+export const GEMINI_API = "AIzaSyAEu_LMqjC3SqU1eNZQVtMk7magfzAYL7w";
