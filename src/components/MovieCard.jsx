@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { IMG_CND_URL } from "../utils/constants";
 import { FaPlay, FaPlus, FaInfoCircle } from "react-icons/fa";
 
-const MovieCard = ({ posterPath, movies }) => {
+const MovieCard = ({ posterPath, movie_title }) => {
+  const [showInfoBox, setShowInfoBox] = useState(false);
+
   if (!posterPath) return null;
 
   return (
-    <div className="group w-[140px] min-w-[140px] sm:w-[160px] sm:min-w-[160px] md:w-[200px] md:min-w-[200px] lg:w-[240px] lg:min-w-[240px] transition-all duration-300 ease-in-out hover:scale-110 hover:z-10">
-      <div className="relative aspect-video rounded-md overflow-hidden shadow-lg bg-neutral-900">
+    <div className="group w-[120px] min-w-[120px] sm:w-[140px] sm:min-w-[140px] md:w-[160px] md:min-w-[160px] lg:w-[180px] lg:min-w-[180px] transition-all duration-300 ease-in-out hover:scale-110 hover:z-50">
+      <div className="relative aspect-[2/3.5] rounded-md overflow-hidden shadow-lg bg-neutral-900">
         {/* Poster Image */}
         <img
           src={IMG_CND_URL + posterPath}
-          alt={movies.original_title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
 
@@ -25,9 +26,54 @@ const MovieCard = ({ posterPath, movies }) => {
               <button className="bg-white/20 text-white p-1.5 sm:p-2 rounded-full hover:bg-white/30 transition duration-300 hover:scale-110">
                 <FaPlus className="w-3 h-3 sm:w-4 sm:h-4" />
               </button>
-              <button className="bg-white/20 text-white p-1.5 sm:p-2 rounded-full hover:bg-white/30 transition duration-300 hover:scale-110">
-                <FaInfoCircle className="w-3 h-3 sm:w-4 sm:h-4" />
-              </button>
+              <div className="relative">
+                <button
+                  className="bg-white/20 text-white p-1.5 sm:p-2 rounded-full hover:bg-white/30 transition duration-300 hover:scale-110"
+                  onMouseEnter={() => setShowInfoBox(true)}
+                  onMouseLeave={() => setShowInfoBox(false)}
+                >
+                  <FaInfoCircle className="w-3 h-3 sm:w-4 sm:h-4" />
+                </button>
+                {/* Info Box */}
+                {showInfoBox && (
+                  <div
+                    className="absolute transform -translate-x-1/2 w-64 bg-[#181818] text-white p-4 rounded-md shadow-2xl z-[9999] border border-gray-700"
+                    style={{
+                      bottom: "calc(100% + 10px)",
+                      left: "50%",
+                      position: "fixed",
+                    }}
+                    onMouseEnter={() => setShowInfoBox(true)}
+                    onMouseLeave={() => setShowInfoBox(false)}
+                  >
+                    <div className="space-y-3">
+                      <p className="font-semibold text-base text-white">
+                        {movie_title}
+                      </p>
+                      <div className="flex items-center space-x-2 text-sm">
+                        <span className="text-green-500 font-medium">
+                          98% Match
+                        </span>
+                        <span className="text-gray-400">•</span>
+                        <span className="text-gray-300">2024</span>
+                        <span className="text-gray-400">•</span>
+                        <span className="border border-gray-500 px-1 text-gray-300">
+                          TV-MA
+                        </span>
+                      </div>
+                      <div className="pt-1">
+                        <p className="text-sm text-gray-300 leading-relaxed">
+                          A brief description of the movie would go here. This
+                          is a placeholder text that will be replaced with
+                          actual movie description.
+                        </p>
+                      </div>
+                    </div>
+                    {/* Arrow */}
+                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-[#181818] transform rotate-45 border-r border-b border-gray-700"></div>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="flex items-center justify-between text-xs sm:text-sm text-white">
               <div className="flex items-center space-x-1 sm:space-x-2">
@@ -61,7 +107,7 @@ const MovieCard = ({ posterPath, movies }) => {
       {/* Movie Title - Always Visible */}
       <div className="mt-2 px-1">
         <h3 className="text-white text-sm sm:text-base font-medium truncate">
-          {movies.original_title}
+          {movie_title}
         </h3>
       </div>
     </div>

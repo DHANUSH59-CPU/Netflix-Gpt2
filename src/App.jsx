@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   RouterProvider,
   createBrowserRouter,
@@ -6,42 +6,11 @@ import {
 } from "react-router-dom";
 import Body from "./components/Body";
 import Login from "./components/Login";
-import { useDispatch, useSelector } from "react-redux";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./utils/firebase";
-import { addUser, removeUser } from "./utils/userSlice";
+import { useSelector } from "react-redux";
 
 const AppLayout = () => {
   const user = useSelector((store) => store.user);
-  const dispatch = useDispatch();
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const { uid, email, displayName } = user;
-        dispatch(addUser({ uid, email, displayName }));
-      } else {
-        dispatch(removeUser());
-      }
-      setIsInitialized(true);
-    });
-
-    return () => unsubscribe();
-  }, [dispatch]);
-
-  if (!isInitialized) {
-    return (
-      <div className="h-screen w-screen bg-black flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-opacity-30 border-t-red-600 border-white rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return <Navigate to="/" replace />;
-  }
-
+  if (!user) return <Navigate to="/" replace />;
   return <Body />;
 };
 

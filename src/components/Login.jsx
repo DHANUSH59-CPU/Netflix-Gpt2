@@ -83,7 +83,7 @@ const Login = () => {
       }
 
       // Navigate after successful sign in or sign up
-      navigate("/body");
+      // navigate("/body");
     } catch (error) {
       seterrorMessage(error.message);
     } finally {

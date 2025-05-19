@@ -25,10 +25,16 @@
 - Embedded the Youtube video and make it autoplay and mute
 - Tailwind css for videobackground
 - Seconadry container
-- - MovieList and MovieCard
+- MovieList and MovieCard
 - For MovieList get title and movies as props from secondary container
-- For MovieCard Get poster_path as prop 
-- In MovieList use Movie list to iterate all over the movies obejct 
+- For MovieCard Get poster_path as prop
+- In MovieList use Movie list to iterate all over the movies object
+- Create custom hooks for Nowplaying,Toprated,Upcoming to make API calls
+- Fill them in redux store
+- Use them in MovieList To Display
+- Create GptSearch Page
+- Create GptSearch Bar and GptMovieSuggestion for GptPage
+- Language Translation for GptSearchPage
 
 # Features
 

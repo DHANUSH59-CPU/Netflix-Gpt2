@@ -4,18 +4,31 @@ import Header from "./Header";
 import useNowPlayingMovies from "../hooks/useNowPlayingMovies";
 import MainContainer from "./MainContainer";
 import SecondaryContainer from "./SecondaryContainer";
+import GptSearch from "./GptPage";
 
 const Body = () => {
   const user = useSelector((store) => store.user);
   const { isLoading, error } = useNowPlayingMovies();
+
+  // For Show GptSearch View
+  const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
 
   if (!user) {
     return null;
   }
 
   return (
-    <div className="bg-black min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden">
       <Header />
+      {showGptSearch ? (
+        <GptSearch />
+      ) : (
+        // Dont forget add these 2 inside the <></> because only one component can be present -> To make it 2 you have to keep it inside this
+        <>
+          <MainContainer />
+          <SecondaryContainer />
+        </>
+      )}
 
       {/* Loading Animation */}
       {isLoading && (
@@ -45,9 +58,6 @@ const Body = () => {
           </div>
         </div>
       )}
-
-      <MainContainer />
-      <SecondaryContainer />
     </div>
   );
 };
