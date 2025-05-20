@@ -42,6 +42,7 @@ export const GptMovieSuggestion = () => {
               key={firstMovie.id}
               posterPath={firstMovie.poster_path}
               movie_title={firstMovie.title}
+              id={movieData.id}
             />
           ); // A Bug : Im Using return here because it is inside the {}, In MovieList I didnot use Bez it was in ()
         })}

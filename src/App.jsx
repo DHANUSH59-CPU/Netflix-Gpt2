@@ -7,6 +7,7 @@ import {
 import Body from "./components/Body";
 import Login from "./components/Login";
 import { useSelector } from "react-redux";
+import VideoCardComponent from "./components/videoCard";
 
 const AppLayout = () => {
   const user = useSelector((store) => store.user);
@@ -26,6 +27,10 @@ const appRouter = createBrowserRouter([
   {
     path: "*",
     element: <Navigate to="/" replace />,
+  },
+  {
+    path: "/video/:id",
+    element: <VideoCardComponent />,
   },
 ]);
 

@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { IMG_CND_URL } from "../utils/constants";
 import { FaPlay, FaPlus, FaInfoCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-const MovieCard = ({ posterPath, movie_title }) => {
+const MovieCard = ({ posterPath, movie_title, id }) => {
   const [showInfoBox, setShowInfoBox] = useState(false);
+
+  const navigate = useNavigate();
 
   if (!posterPath) return null;
 
@@ -21,7 +24,10 @@ const MovieCard = ({ posterPath, movie_title }) => {
           <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 md:p-4 space-y-2 sm:space-y-3">
             <div className="flex justify-center space-x-2 sm:space-x-3">
               <button className="bg-white text-black p-1.5 sm:p-2 rounded-full hover:bg-red-600 hover:text-white transition duration-300 hover:scale-110">
-                <FaPlay className="w-3 h-3 sm:w-4 sm:h-4" />
+                <FaPlay
+                  className="w-3 h-3 sm:w-4 sm:h-4"
+                  onClick={() => navigate(`/video/${id}`)}
+                />
               </button>
               <button className="bg-white/20 text-white p-1.5 sm:p-2 rounded-full hover:bg-white/30 transition duration-300 hover:scale-110">
                 <FaPlus className="w-3 h-3 sm:w-4 sm:h-4" />

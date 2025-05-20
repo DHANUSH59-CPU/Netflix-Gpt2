@@ -5,13 +5,12 @@ import { GoogleGenAI } from "@google/genai";
 import { GEMINI_API } from "../utils/constants";
 import { addgptMovies } from "../utils/gptMovieSlice";
 import { API_OPTIONS } from "../utils/constants";
-// import AIIcon from "./Aicomp";
+import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react"; // Optional: Lucide icon, install if needed
 
 const GptSearchBar = () => {
   const language = useSelector((store) => store.language.language);
-
   const dispatch = useDispatch();
-
   const ai = new GoogleGenAI({ apiKey: GEMINI_API });
   const MovieRef = useRef(null);
 
@@ -20,7 +19,6 @@ const GptSearchBar = () => {
       "https://api.themoviedb.org/3/search/movie?query=" +
       movie +
       "&include_adult=false&language=en-US&page=1";
-
     const result = await fetch(url, API_OPTIONS);
     const json = await result.json();
     return json.results;
@@ -35,7 +33,7 @@ const GptSearchBar = () => {
       model: "gemini-2.0-flash",
       contents: query,
     });
-    // console.log(response);
+
     const movieName =
       response?.candidates[0]?.content?.parts[0].text?.split(",");
     const movieData = movieName.map((movie) => FetchDataBymovieName(movie));
@@ -50,12 +48,21 @@ const GptSearchBar = () => {
         className="flex w-full max-w-2xl items-center bg-black/80 backdrop-blur-sm border border-gray-800 rounded-md px-3 sm:px-4 py-2 sm:py-3 space-x-2 sm:space-x-3 shadow-xl"
         onSubmit={(e) => e.preventDefault()}
       >
+        <motion.div
+          animate={{ y: [0, -5, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="text-yellow-400"
+        >
+          <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
+        </motion.div>
+
         <input
           type="text"
           ref={MovieRef}
           placeholder={lang[language].GptSearchPlaceholder}
           className="flex-grow bg-transparent text-white placeholder-gray-400 text-xs sm:text-sm md:text-base font-medium focus:outline-none focus:ring-0"
         />
+
         <button
           type="submit"
           className="bg-netflix-red text-white px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-md text-xs sm:text-sm font-semibold hover:bg-[#e50914]/90 transition-colors whitespace-nowrap"
