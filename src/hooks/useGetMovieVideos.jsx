@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { addTrailerVideo } from "../utils/moviesSlice";
@@ -9,6 +8,8 @@ const useGetMovieVideos = ({ movieId }) => {
 
   useEffect(() => {
     const getMovieVideos = async () => {
+      if (!movieId) return;
+      console.log("Fetching trailer for movie ID:", movieId);
       try {
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/${movieId}/videos`,
@@ -30,8 +31,8 @@ const useGetMovieVideos = ({ movieId }) => {
       }
     };
 
-    if (movieId) getMovieVideos();
-  }, [movieId, dispatch]);
+    getMovieVideos(); // Call every render
+  }, []); // ❌ no dependency array means it runs every render
 };
 
 export default useGetMovieVideos;

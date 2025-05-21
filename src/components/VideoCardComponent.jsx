@@ -5,7 +5,8 @@ import useGetMovieVideos from "../hooks/useGetMovieVideos";
 
 const VideoCardComponent = () => {
   const { id } = useParams();
-  useGetMovieVideos(id);
+  useGetMovieVideos({ movieId: id }); // VVVVIMP
+  console.log(id);
   const trailerVideo = useSelector((store) => store.movies?.trailerVideo);
 
   if (!trailerVideo) return;

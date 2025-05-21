@@ -7,7 +7,8 @@ import {
 import Body from "./components/Body";
 import Login from "./components/Login";
 import { useSelector } from "react-redux";
-import VideoCardComponent from "./components/videoCard";
+import VideoCardComponent from "./components/VideoCardComponent";
+// import VideoPage from "./components/VideoPage";
 
 const AppLayout = () => {
   const user = useSelector((store) => store.user);
