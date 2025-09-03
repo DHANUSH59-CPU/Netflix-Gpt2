@@ -5,7 +5,7 @@ import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { removeUser, addUser } from "../utils/userSlice";
-import { FaBell, FaSearch, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaBell, FaSearch, FaUser, FaSignOutAlt, FaPlay } from "react-icons/fa";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 // mport { useDispatch, useSelector } from "react-redux";
 import { toggleGptSearchView } from "../utils/gptSlice";
